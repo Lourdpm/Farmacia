@@ -1,28 +1,70 @@
-document.querySelectorAll('.materia').forEach(boton => {
-  boton.addEventListener('click', () => {
-    if (boton.classList.contains('bloqueada')) return;
+const materias = {
+  matematica: [],
+  quimica: [],
+  icse: [],
+  ipc: [],
+  "biologia-intro": [],
+  "fisica-intro": [],
+  "qg-inorganica": ["matematica", "quimica", "icse", "ipc", "biologia-intro", "fisica-intro"],
+  "matematica-superior": ["matematica"],
+  "anatomia": [],
+  "fisica": ["matematica-superior"],
+  "biologia-celular": ["anatomia"],
+  "qo1": ["qg-inorganica"],
+  "qo2": ["qo1"],
+  "fisio": ["biologia-celular"],
+  "qa": ["qo1", "qg-inorganica", "matematica-superior"],
+  "fisicoquimica": ["fisica"],
+  "qbiologica": ["biologia-celular", "qo2"],
+  "qainstrumental": ["qa"],
+  "farmacognosia": ["qbiologica", "qo2", "farmacobotanica"],
+  "farmaco1": ["fisio"],
+  "farmaco2": ["farmaco1"],
+  "farmacoclinica": ["farmaco1", "fisiopatologia", "inmunologia"],
+  "farmaciaclinica": ["farmaco1", "fisiopatologia", "inmunologia"],
+  "toxicologia": ["qainstrumental", "qa", "qbiologica"],
+  "nutricion": ["fisio", "qbiologica"],
+  "salud-publica": ["qa", "microbiologia"],
+  "pse": [],
+  "farmacobotanica": ["biologia-celular"],
+  "fisiopatologia": ["fisio"],
+  "microbiologia": ["qbiologica"],
+  "inmunologia": ["qbiologica"],
+  "tecfarma1": ["fisicoquimica"],
+  "tecfarma2": ["tecfarma1"],
+  "calidad": ["qainstrumental", "tecfarma1"],
+  "bromatologia": ["microbiologia", "nutricion"],
+  "qmedicinal": ["farmacognosia", "farmaco2"],
+  "bioestadistica": ["matematica-superior"],
+  "ingles": [],
+  "legislacion": [],
+  "ppf": ["farmaco1", "microbiologia"],
+  "labintegrador": ["matematica", "quimica", "icse", "ipc", "biologia-intro", "fisica-intro"]
+};
 
-    boton.classList.toggle('aprobada');
+const aprobadas = new Set();
 
-    actualizarEstadoMaterias();
+function actualizarMaterias() {
+  for (const id in materias) {
+    const boton = document.getElementById(id);
+    if (aprobadas.has(id)) {
+      boton.classList.add("aprobada");
+      boton.disabled = false;
+    } else {
+      const requisitos = materias[id];
+      const habilitada = requisitos.every(req => aprobadas.has(req));
+      boton.disabled = !habilitada;
+    }
+  }
+}
+
+document.querySelectorAll(".materia").forEach(boton => {
+  boton.addEventListener("click", () => {
+    const id = boton.id;
+    if (!aprobadas.has(id)) {
+      aprobadas.add(id);
+      boton.classList.add("aprobada");
+      actualizarMaterias();
+    }
   });
 });
-
-function actualizarEstadoMaterias() {
-  document.querySelectorAll('.materia').forEach(materia => {
-    const requisitos = materia.dataset.pc?.split(',') || [];
-    const aprobadas = Array.from(document.querySelectorAll('.aprobada')).map(b => b.id);
-
-    if (requisitos.length === 0) return;
-
-    const habilitada = requisitos.every(req => aprobadas.includes(req));
-
-    if (habilitada && materia.classList.contains('bloqueada')) {
-      materia.classList.remove('bloqueada');
-    }
-
-    if (!habilitada && !materia.classList.contains('bloqueada') && !materia.classList.contains('aprobada')) {
-      materia.classList.add('bloqueada');
-    }
-  });
-} 
