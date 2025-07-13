@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Malla Interactiva Farmacia</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <h1>Malla Interactiva - Farmacia (Plan 2023)</h1>
+
+  <div class="semestre" id="semestre3">
+    <h2>3° Cuatrimestre</h2>
+    <button class="materia" id="F7">Química General e Inorgánica</button>
+    <button class="materia" id="CBC-M">Matemática</button>
+    <button class="materia" id="CBC-A">Anatomía e Histología</button>
+  </div>
+
+  <div class="semestre" id="semestre4">
+    <h2>4° Cuatrimestre</h2>
+    <button class="materia bloqueada" id="F8" data-pc="F7">Física</button>
+    <button class="materia bloqueada" id="F9" data-pc="CBC-A">Biología Celular</button>
+    <button class="materia bloqueada" id="F12" data-pc="F7">Química Orgánica I</button>
+  </div>
+
+  <!-- Más materias agregadas siguiendo mismo esquema -->
+
+  <script src="script.js"></script>
+</body>
+</html>
